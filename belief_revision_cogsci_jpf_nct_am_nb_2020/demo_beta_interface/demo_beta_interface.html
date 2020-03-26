@@ -1,0 +1,80 @@
+
+<!-- <!DOCTYPE html> -->
+<html>
+<head>
+<title>DEMO BETA INTERFACE</title>
+
+<script type="text/javascript" src="js/lib/jStat.js"></script>
+<script type="text/javascript" src="js/lib/plotly.js"></script>
+<script type="text/javascript" src="js/lib/jquery.js"></script>
+<script type="text/javascript" src="js/custom_js/slider_transformations.js"></script>
+<script type="text/javascript" src="js/custom_js/create_beta_plots.js"></script>
+
+
+<style type="text/css" href="css/style.css"></style>
+
+</head>
+
+<body class="light-page">
+
+<div class="frame" width=50%>
+	<div align="center" class="slidecontainer" id="demo_plot">
+				<p align="center"><b>Belief Slider:</b></p>
+				<input  class="slider" type="range" min="5" max="95" value="50" id="belief_slider" width="60%" oninput="beliefOutputId.value = Math.round(transform_bel_slider_val(belief_slider.value))" .ui-slider-handle { display:none; }
+				<output id="beliefOutputId">50</output>
+
+				<br></br>
+				<p align="center"><b>Confidence Slider:</b></p>
+				<input class="slider" type="range" min="1" max="99" value="50" id="confidence_slider" width="60%" oninput="confidenceOutputId.value = Math.round(transform_con_slider_val(confidence_slider.value))">
+				<output id="confidenceOutputId">50</output>
+	</div>
+</div>
+</body>
+
+<script type="text/javascript">
+ 
+ var plot_distributions = function(bel_slider, con_slider, name_1, name_2, plot_division) {
+ 	
+ // 	var belief = 0.5;
+	// var variance = log_slider(50); 
+	// var x = create_data(belief/100, variance)[0];
+	// var y = create_data(belief/100, variance)[1];
+	// create_plot(x, y, belief/100, name_1, name_2, plot_division, 550);
+
+	var $belief=$(bel_slider);
+	var $confidence=$(con_slider);
+
+
+
+	$belief.on('input',function(){
+	    var belief = parseInt($belief.val());
+	    var variance = log_slider(parseInt($confidence.val())); 
+	    var x = create_data(belief/100, variance)[0];
+		var y = create_data(belief/100, variance)[1];
+
+		if ($('#confidenceOutputId').value() == 50) {
+
+			create_plot_start(x, y, belief/100, name_1, name_2, plot_division, 550);
+
+		} else if ($('#confidenceOutputId').value() != 50)
+			create_plot(x, y, belief/100, name_1, name_2, plot_division, 550);
+	});
+
+	
+	$confidence.on('input',function(){
+		var belief = parseInt($belief.val());
+		var variance = log_slider(parseInt($confidence.val()));  
+		var x = create_data(belief/100, variance)[0];
+		var y = create_data(belief/100, variance)[1];
+		create_plot(x, y, belief/100, name_1, name_2, plot_division, 550); 
+		
+	});
+}; 
+
+plot_distributions('#belief_slider', '#confidence_slider', 'demo_plot', '0.00', '1.00');
+
+
+</script>
+
+</html>
+
